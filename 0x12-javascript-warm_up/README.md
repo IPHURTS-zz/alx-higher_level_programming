@@ -1,0 +1,16 @@
+- Why JavaScript programming is amazing
+ - How to run a JavaScript scr
+- How to create variables and constants
+- What are differences between var, const and let
+- What are all the data types available in JavaScr
+- How to use the if, if ... else stateme
+- How to use comme
+- How to affect values to variab
+- How to use while and for lo
+- How to use break and continue statements
+- What is a function  - how do you use functions
+- What does a function that does not use any return statement return
+- Scope of variables
+- What are the arithmetic operators  - how to use t
+- How to manipulate diction
+- How to import a file
