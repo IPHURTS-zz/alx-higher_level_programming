@@ -1,0 +1,12 @@
+{
+  "name": "0x12-javascript-warm_up",
+  "version": "1.0.0",
+  "description": "- Why JavaScript programming is amazing\r  - How to run a JavaScript scr\r - How to create variables and constants\r - What are differences between var, const and let\r - What are all the data types available in JavaScr\r - How to use the if, if ... else stateme\r - How to use comme\r - How to affect values to variab\r - How to use while and for lo\r - How to use break and continue statements\r - What is a function  - how do you use functions\r - What does a function that does not use any return statement return\r - Scope of variables\r - What are the arithmetic operators  - how to use t\r - How to manipulate diction\r - How to import a file",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
