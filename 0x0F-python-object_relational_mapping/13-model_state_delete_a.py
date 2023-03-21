@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """
+<<<<<<< HEAD
     A script that deletes all State objects from hbtn_0e_6_usa that conatin
     the letter a
     Username, password and dbname wil be passed as arguments to the script.
@@ -31,4 +32,23 @@ if __name__ == '__main__':
 
     session.commit()
 
+=======
+All states via SQLAlchemy
+"""
+from sys import argv
+from model_state import Base, State
+from sqlalchemy import (create_engine)
+from sqlalchemy.orm import Session
+
+if __name__ == "__main__":
+    engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'.
+                           format(argv[1], argv[2], argv[3]),
+                           pool_pre_ping=True)
+    Base.metadata.create_all(engine)
+
+    session = Session(engine)
+    data = session.query(State).filter(State.name.like("%a%"))\
+                               .delete(synchronize_session='fetch')
+    session.commit()
+>>>>>>> b95bb6843f82300f1bcc5e44f6aff07f0f6e7031
     session.close()

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+<<<<<<< HEAD
 """
     A script that lists all states from the database hbtn_0e_0_usa
     starting with capital letter N
@@ -31,3 +32,23 @@ if __name__ == '__main__':
 
     cursor.close()
     db.close()
+=======
+
+import MySQLdb
+from sys import argv
+
+'''
+lists all states with starting name with N
+from the database hbtn_0e_0_usa
+'''
+if __name__ == "__main__":
+    con = MySQLdb.connect(
+        host="localhost", port=3306, user=argv[1],
+        password=argv[2], database=argv[3])
+    cursor = con.cursor()
+    cursor.execute(
+            "SELECT * FROM states WHERE name LIKE BINARY 'N%'ORDER BY id ASC")
+    db = cursor.fetchall()
+    for i in db:
+        print(i)
+>>>>>>> b95bb6843f82300f1bcc5e44f6aff07f0f6e7031
