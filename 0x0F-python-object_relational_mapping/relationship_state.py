@@ -1,27 +1,26 @@
 #!/usr/bin/python3
-"""
-class definition of a State and an instance Base = declarative_base()
-"""
 
+"""
+A script that defines model via SQLAlchemy ORM
+"""
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
 
-Base = declarative_base()
+Base: declarative_base = declarative_base()
 
 
 class State(Base):
+    """Defines a state model
+    Attributes:
+        id (Integer): Primary key
+        name (String): Name of state
+        cities (City): List of City instances associated with this state
     """
-    State class:
-    inherits from Base
-    links to the MySQL table states
-    class attribute id that represents a column of an auto-generated,
-    unique integer, cant be null and is a primary key
-    class attribute name that represents a column of a string
-    with maximum 128 characters and cant be null
-    """
-    __tablename__ = 'states'
-    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
-    name = Column(String(128), nullable=False)
-    cities = relationship('City', cascade='save-update, merge, delete',
-                          backref='state')
+    __tablename__: str = 'states'
+    id: Column = Column(Integer, primary_key=True, nullable=False)
+    name: Column = Column(String(128), nullable=False)
+
+    cities: relationship = relationship(
+        "City", backref="state", cascade="all, delete"
+    )

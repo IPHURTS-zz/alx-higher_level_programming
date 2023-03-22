@@ -1,35 +1,38 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
+
+"""
+A script that lists all states from the database hbtn_0e_0_usa
+"""
+
+from typing import Any
 import MySQLdb
-import sys
+
+
+def getStates(params: list) -> None:
+    """
+    Gets all states from a database and prints them in ascending order
+
+    Args:
+        params (list): List of arguments given to script
+    """
+    query: str = "SELECT * FROM states ORDER BY states.id ASC"
+    try:
+        conn: MySQLdb.Connection = MySQLdb.connect(
+            host="localhost", port=3306, user=params[0],
+            passwd=params[1], db=params[2], charset="utf8"
+        )
+        cursor: Any = conn.cursor()
+        cursor.execute(query)
+        records: list[tuple] = cursor.fetchall()
+        for row in records:
+            print(row)
+        cursor.close()
+        conn.close()
+    except MySQLdb.Error:
+        pass
+
 
 if __name__ == '__main__':
-    if len(sys.argv) != 4:
-        print("Usage: {} <username> <password> <database>".format(sys.argv[0]))
-        sys.exit(1)
-
-    username = sys.argv[1]
-    password = sys.argv[2]
-    database = sys.argv[3]
-
-    try:
-        conn = MySQLdb.connect(
-            host="localhost",
-            user=username,
-            passwd=password,
-            db=database,
-            port=3306)
-    except Exception as e:
-        print("Error connecting to database: {}".format(str(e)))
-        sys.exit(1)
-
-    cursor = conn.cursor()
-
-    cursor.execute("SELECT * FROM states ORDER BY id ASC")
-
-    rows = cursor.fetchall()
-
-    for row in rows:
-        print(row)
-
-    cursor.close()
-    conn.close()
+    from sys import argv
+    [host, user, db] = argv[1:]
+    getStates([host, user, db])

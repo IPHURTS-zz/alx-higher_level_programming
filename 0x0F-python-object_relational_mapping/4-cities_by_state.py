@@ -1,58 +1,39 @@
 #!/usr/bin/python3
-<<<<<<< HEAD
 
 """
-    A script that lists all cities from the database hbtn_0e_0_usa
-    Username, password and database names are given as user args
+A script that execute a query and prevent sql injection
 """
 
-
-import sys
 import MySQLdb
+from MySQLdb.cursors import Cursor
+
+
+def getCitiesByStates(params: list) -> None:
+    """
+    Filter states by user input and prevent sql injection
+    Args:
+        params (list): List of arguments given to script
+    """
+    query: str = """
+    SELECT cities.id, cities.name, states.name
+    FROM cities LEFT JOIN states ON cities.state_id = states.id"""
+    try:
+        conn: MySQLdb.Connection = MySQLdb.connect(
+            host="localhost", port=3306, user=params[0],
+            passwd=params[1], db=params[2], charset="utf8"
+        )
+        cursor: Cursor = conn.cursor()
+        cursor.execute(query)
+        records: list[tuple] = cursor.fetchall()
+        for row in records:
+            print(row)
+        cursor.close()
+        conn.close()
+    except MySQLdb.Error as e:
+        print(e)
 
 
 if __name__ == '__main__':
-    db = MySQLdb.connect(user=sys.argv[1],
-                         passwd=sys.argv[2],
-                         db=sys.argv[3],
-                         host='localhost',
-                         port=3306)
-
-    cursor = db.cursor()
-
-    sql = """SELECT c.id, c.name, s.name
-          FROM states s, cities c
-          WHERE c.state_id = s.id
-          ORDER BY c.id ASC"""
-
-    cursor.execute(sql)
-
-    data = cursor.fetchall()
-
-    for row in data:
-        print(row)
-
-    cursor.close()
-    db.close()
-=======
-"""
-lists all cities from the database hbtn_0e_4_usa
-"""
-if __name__ == "__main__":
-
-    import MySQLdb
     from sys import argv
-
-    conect = MySQLdb.connect(host="localhost", port=3306, user=argv[1],
-                             passwd=argv[2], db=argv[3], charset="utf8")
-    cursor = conect.cursor()
-    cursor.execute("""SELECT cities.id, cities.name, states.name
-    FROM cities
-    LEFT JOIN states ON cities.state_id = states.id
-    ORDER BY cities.id ASC""")
-    query_rows = cursor.fetchall()
-    for row in query_rows:
-        print(row)
-    cursor.close()
-    conect.close()
->>>>>>> b95bb6843f82300f1bcc5e44f6aff07f0f6e7031
+    [host, user, db] = argv[1:]
+    getCitiesByStates([host, user, db])

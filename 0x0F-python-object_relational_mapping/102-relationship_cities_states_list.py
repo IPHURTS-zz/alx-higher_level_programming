@@ -1,25 +1,32 @@
 #!/usr/bin/python3
+
 """
-script that lists all City objects
-from the database hbtn_0e_101_usa
+A script that lists all City objects from the database hbtn_0e_101_usa
 """
-import sqlalchemy
+
+from sys import argv
+from typing import List
+from sqlalchemy.engine import Engine
+from relationship_city import City
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from relationship_state import Base, State
-from relationship_city import City
-from sys import argv
 
 
-if __name__ == "__main__":
-    e = 'mysql+mysqldb://{}:{}@localhost/{}'.format(argv[1],
-                                                    argv[2],
-                                                    argv[3])
-    engine = create_engine(e)
-    Base.metadata.create_all(engine)
+def createSession(args: List[str]):
+    """Create a MySQL database session
+    Args:
+        args (list): List of arguments passed to the script
+    """
+    engine: Engine = create_engine(
+        'mysql+mysqldb://{}:{}@localhost/{}'.format(args[0], args[1], args[2]),
+        pool_pre_ping=True
+    )
     Session = sessionmaker(bind=engine)
-    s = Session()
-    cities = s.query(City).all()
-    for city in cities:
-        print("{}: {} -> {}".format(city.id, city.name, city.state.name))
-    s.close()
+    return Session()
+
+
+if __name__ == '__main__':
+    session = createSession(argv[1:])
+    for city in session.query(City).order_by(City.id):
+        print(f'{city.id}: {city.name} -> {city.state.name}')
+    session.close()

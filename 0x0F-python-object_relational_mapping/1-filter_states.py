@@ -1,54 +1,40 @@
 #!/usr/bin/python3
 
-<<<<<<< HEAD
 """
-    A script that lists all states from the database hbtn_0e_0_usa
-    starting with capital letter N
-    Username, password and database names are given as user args
+A script that lists all states with a name
+starting with N (upper N) from the database hbtn_0e_0_usa
 """
 
-
-import sys
 import MySQLdb
+from MySQLdb.cursors import Cursor
+
+
+def filterStates(params: list) -> None:
+    """Filter states that start with 'N' and prints them in ascending order
+    Args:
+        params (list): List of arguments given to script
+    """
+    query: str = """
+    SELECT * FROM `states`
+    WHERE BINARY `name` LIKE 'N%' ORDER BY `id` ASC"""
+    try:
+        conn: MySQLdb.Connection = MySQLdb.connect(
+            host="localhost", port=3306, user=params[0],
+            passwd=params[1], db=params[2], charset="utf8"
+        )
+        cursor: Cursor = conn.cursor()
+        cursor.execute(query)
+        records: list[tuple] = cursor.fetchall()
+        for row in records:
+            if row[1][0] == 'N':
+                print(row)
+        cursor.close()
+        conn.close()
+    except MySQLdb.Error:
+        pass
 
 
 if __name__ == '__main__':
-    db = MySQLdb.connect(user=sys.argv[1],
-                         passwd=sys.argv[2],
-                         db=sys.argv[3],
-                         host='localhost',
-                         port=3306)
-
-    cursor = db.cursor()
-
-    cursor.execute("SELECT * FROM states\
-                    WHERE name LIKE BINARY 'N%'\
-                    ORDER BY id ASC")
-
-    data = cursor.fetchall()
-
-    for row in data:
-        print(row)
-
-    cursor.close()
-    db.close()
-=======
-
-import MySQLdb
-from sys import argv
-
-'''
-lists all states with starting name with N
-from the database hbtn_0e_0_usa
-'''
-if __name__ == "__main__":
-    con = MySQLdb.connect(
-        host="localhost", port=3306, user=argv[1],
-        password=argv[2], database=argv[3])
-    cursor = con.cursor()
-    cursor.execute(
-            "SELECT * FROM states WHERE name LIKE BINARY 'N%'ORDER BY id ASC")
-    db = cursor.fetchall()
-    for i in db:
-        print(i)
->>>>>>> b95bb6843f82300f1bcc5e44f6aff07f0f6e7031
+    from sys import argv
+    [host, user, db] = argv[1:]
+    filterStates([host, user, db])
